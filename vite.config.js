@@ -15,7 +15,6 @@ export default defineConfig(({ mode }) => {
           rewrite: (path) => path.replace(/^\/api/, ''),
         },
         '/zyx': {
-          // Lấy URL từ biến môi trường MOCK_API_URL
           target: env.MOCK_API_URL || '',
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/zyx/, ''),

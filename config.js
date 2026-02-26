@@ -4,7 +4,7 @@ const CONFIG = {
     API_BASE_URL: 'https://api.viotp.com',
     
     // Your API Token - CHANGE THIS TO YOUR ACTUAL TOKEN
-    API_TOKEN: '608e6ad63b00426e8ac2ac9c6dfe90a3',
+    API_TOKEN: '',
     
     // CORS Proxy - Use one of these to bypass CORS restrictions
     // Option 1: Use CORS proxy (recommended for testing)
