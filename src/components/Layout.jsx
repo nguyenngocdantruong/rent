@@ -7,7 +7,24 @@ import { getBalance } from '../lib/api';
 export default function Layout({ children }) {
   const [balance, setBalance] = useState(getBalanceCached());
   const [showQR, setShowQR] = useState(false);
+  const [reloading, setReloading] = useState(false);
+  const [toast, setToast] = useState(null);
   const location = useLocation();
+
+  const handleReloadBalance = async () => {
+    if (reloading) return;
+    setReloading(true);
+    try {
+      const v = await getBalance();
+      setBalance(v);
+      setToast({ message: `Số dư: ${v.toLocaleString('vi-VN')}₫`, type: 'success' });
+    } catch (e) {
+      setToast({ message: e.message || 'Không thể tải số dư', type: 'danger' });
+    } finally {
+      setReloading(false);
+      setTimeout(() => setToast(null), 3000);
+    }
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -33,6 +50,17 @@ export default function Layout({ children }) {
         <div className="top-bar">
           <div />
           <div className="user-info">
+            <button
+              onClick={handleReloadBalance}
+              disabled={reloading}
+              style={{
+                background: 'none', border: 'none', color: '#6c757d',
+                cursor: reloading ? 'default' : 'pointer', fontSize: 15, padding: '0 4px',
+              }}
+              title="Tải lại số dư"
+            >
+              <i className={`fas fa-sync-alt${reloading ? ' fa-spin' : ''}`} />
+            </button>
             <div className="balance">{(balance ?? 0).toLocaleString('vi-VN')}₫</div>
             <button
               onClick={() => setShowQR(true)}
@@ -45,14 +73,19 @@ export default function Layout({ children }) {
             >
               ☕ Nuôi tôi
             </button>
-            <div className="user-avatar">
-              <i className="fas fa-user" />
-            </div>
           </div>
         </div>
         <div className="content-wrapper">{children}</div>
         <div className="footer">2026© <strong>Thuê số online</strong></div>
       </div>
+
+      {toast && (
+        <div className={`alert alert-${toast.type} alert-dismissible fade show position-fixed`}
+          style={{ top: 20, right: 20, zIndex: 9999, minWidth: 300 }}>
+          {toast.message}
+          <button type="button" className="btn-close" onClick={() => setToast(null)} />
+        </div>
+      )}
 
       {showQR && (
         <div
