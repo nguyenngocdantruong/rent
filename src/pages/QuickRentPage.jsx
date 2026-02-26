@@ -2,8 +2,11 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import CONFIG from '../lib/config';
 import { getServicesCached, setServicesCache, getActiveRequests, setActiveRequests } from '../lib/cache';
 import { getServices, rentPhone, getSession } from '../lib/api';
+import { useAuth } from '../lib/AuthContext';
+import { updateQuota } from '../lib/auth';
 
 export default function QuickRentPage() {
+  const { user, refreshUser } = useAuth();
   const [country, setCountry] = useState('vn');
   const [services, setServices] = useState([]);
   const [serviceId, setServiceId] = useState('');
@@ -66,9 +69,27 @@ export default function QuickRentPage() {
 
   const handleRent = async () => {
     if (!serviceId) { showAlert('Vui lòng chọn dịch vụ', 'warning'); return; }
+
+    // Kiểm tra quota
+    if (user && user.quota === 0) {
+      showAlert('Bạn đã hết hạn ngạch thuê số. Vui lòng liên hệ Admin!', 'danger');
+      return;
+    }
+
     setRenting(true);
     try {
       const data = await rentPhone(serviceId, country);
+
+      // Trừ quota nếu không phải vô hạn (-1)
+      if (user && user.quota > 0) {
+        try {
+          await updateQuota(user.id || user.username, user.quota - 1);
+          refreshUser();
+        } catch (err) {
+          console.error('Lỗi cập nhật quota:', err);
+        }
+      }
+
       const selectedService = services.find(s => String(s.id) === String(serviceId));
       const newReq = {
         ...data,
@@ -76,6 +97,7 @@ export default function QuickRentPage() {
         price: selectedService?.price || 0,
         status: CONFIG.STATUS.WAITING,
         code: '', smsContent: '',
+        date_rent: new Date().toISOString(),
         createdTime: new Date().toISOString(),
       };
       setRequests(prev => {
@@ -190,23 +212,32 @@ export default function QuickRentPage() {
         <table className="table table-custom">
           <thead>
             <tr>
-              <th>#</th><th>DỊCH VỤ</th><th>GIÁ</th><th>SỐ ĐIỆN THOẠI</th>
-              <th>CODE</th><th>THỜI GIAN</th><th>TRẠNG THÁI</th><th>TIN NHẮN</th>
+              <th>#</th><th>DỊCH VỤ</th><th>THỜI GIAN THUÊ</th><th>GIÁ</th><th>SỐ ĐIỆY THOẠI</th>
+              <th>CODE</th><th>TRÔI QUA</th><th>TRẠNG THÁI</th><th>TIN NHẮN</th>
             </tr>
           </thead>
           <tbody>
             {requests.size === 0 ? (
-              <tr><td colSpan={8}>
+              <tr><td colSpan={9}>
                 <div className="empty-state">
                   <i className="fas fa-inbox" /><div>Chưa có dữ liệu</div>
                 </div>
               </td></tr>
-            ) : Array.from(requests.entries()).map(([id, req], idx) => {
+            ) : Array.from(requests.entries())
+                .sort(([, a], [, b]) => {
+                  const da = new Date(a.date_rent || a.createdTime || '2000-01-01');
+                  const db = new Date(b.date_rent || b.createdTime || '2000-01-01');
+                  return db - da;
+                })
+                .map(([id, req], idx) => {
               const phone = `0${req.phone_number}`;
+              const d = new Date(req.date_rent || req.createdTime || '2000-01-01');
+              const rentTime = `${d.toLocaleDateString('vi-VN')} ${d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
               return (
                 <tr key={id}>
                   <td>{idx + 1}</td>
                   <td>{req.serviceName}</td>
+                  <td>{rentTime}</td>
                   <td>{parseInt(req.price).toLocaleString('vi-VN')}₫</td>
                   <td>
                     <span style={{ cursor: 'pointer' }} onClick={() => copy(phone)} title="Click để copy">{phone}</span>

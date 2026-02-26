@@ -1,6 +1,7 @@
 const CONFIG = {
   API_BASE_URL: 'https://api.viotp.com',
   API_TOKEN: import.meta.env.VITE_API_TOKEN || '',
+  MOCK_API_URL: import.meta.env.VITE_MOCK_API_URL || 'https://69a0167a3188b0b1d537b675.mockapi.io/users',
   AUTO_REFRESH_INTERVAL: 5000,
   COUNTRIES: [
     { code: 'vn', name: 'Việt Nam', flag: '🇻🇳' },

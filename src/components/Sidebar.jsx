@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 const menu = [
   { title: 'Thuê số nhanh', to: '/quick-rent', icon: 'fa-clock' },
   { title: 'Lịch sử thuê số', to: '/history', icon: 'fa-history' },
-  { title: 'Hướng dẫn', to: '/guide', icon: 'fa-book' }
+  { title: 'Hướng dẫn', to: '/guide', icon: 'fa-book' },
+  { title: 'Thông tin cá nhân', to: '/profile', icon: 'fa-user-circle' },
 ];
 
 export default function Sidebar({ currentPath }) {

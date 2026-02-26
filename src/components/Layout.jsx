@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { getBalanceCached } from '../lib/cache';
 import { getBalance } from '../lib/api';
+import { useAuth } from '../lib/AuthContext';
 
 export default function Layout({ children }) {
   const [balance, setBalance] = useState(getBalanceCached());
@@ -10,6 +11,11 @@ export default function Layout({ children }) {
   const [reloading, setReloading] = useState(false);
   const [toast, setToast] = useState(null);
   const location = useLocation();
+  const { user } = useAuth();
+
+  const initials = user?.fullname
+    ? user.fullname.split(' ').slice(-2).map((w) => w[0].toUpperCase()).join('')
+    : '?';
 
   const handleReloadBalance = async () => {
     if (reloading) return;
@@ -73,6 +79,10 @@ export default function Layout({ children }) {
             >
               ☕ Nuôi tôi
             </button>
+            <Link to="/profile" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div className="user-avatar" title={user?.fullname}>{initials}</div>
+              <span style={{ fontSize: 13, fontWeight: 500, color: '#495057' }}>{user?.fullname}</span>
+            </Link>
           </div>
         </div>
         <div className="content-wrapper">{children}</div>
