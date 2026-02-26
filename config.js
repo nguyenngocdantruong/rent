@@ -15,7 +15,7 @@ const CONFIG = {
     // Set USE_CORS_PROXY: false and API_BASE_URL to your proxy URL
     
     // Auto refresh interval for checking codes (milliseconds)
-    AUTO_REFRESH_INTERVAL: 5000, // 5 seconds
+    AUTO_REFRESH_INTERVAL: 15000, // 15 seconds
     
     // Countries
     COUNTRIES: [
