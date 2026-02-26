@@ -22,12 +22,17 @@ export async function login(username, password) {
     username: user.username,
     fullname: user.fullname,
     avatar: user.avatar,
-    balance: user.balance || 0,
-    quota: user.quota !== undefined ? user.quota : -1
+    // Không lưu balance và quota ở đây nữa để tránh bị sửa thủ công
   };
 
   sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
-  return session;
+  return { ...session, balance: user.balance, quota: user.quota };
+}
+
+export async function fetchUserInfo(userId) {
+  const res = await fetch(`${API_URL}/${userId}`);
+  if (!res.ok) throw new Error('Không thể lấy thông tin người dùng');
+  return await res.json();
 }
 
 export async function updateQuota(userId, newQuota) {
