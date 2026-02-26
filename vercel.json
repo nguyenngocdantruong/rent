@@ -4,6 +4,7 @@
   "rewrites": [
     { "source": "/api/proxy", "destination": "/api/proxy.js" },
     { "source": "/api/zyx/(.*)", "destination": "/api/zyx.js" },
+    { "source": "/zyx/(.*)", "destination": "/api/zyx.js" },
     { "source": "/api/(.*)", "destination": "https://api.viotp.com/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
