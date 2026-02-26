@@ -1,7 +1,7 @@
 import CONFIG from './config';
 
 const SESSION_KEY = 'viotp_user';
-const API_URL = CONFIG.MOCK_API_URL;
+const API_URL = "/zyx";
 
 export async function login(username, password) {
   const res = await fetch(`${API_URL}/${username}`);
