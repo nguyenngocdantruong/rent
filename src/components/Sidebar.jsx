@@ -8,7 +8,7 @@ const menu = [
   { title: 'Thông tin cá nhân', to: '/profile', icon: 'fa-user-circle' },
 ];
 
-export default function Sidebar({ currentPath }) {
+export default function Sidebar({ currentPath, onItemClick }) {
   const [showMaintenance, setShowMaintenance] = useState(false);
 
   return (
@@ -61,13 +61,17 @@ export default function Sidebar({ currentPath }) {
               <a
                 href="#"
                 className={currentPath === item.to ? 'active' : ''}
-                onClick={e => { e.preventDefault(); setShowMaintenance(true); }}
+                onClick={e => {
+                  e.preventDefault();
+                  setShowMaintenance(true);
+                  if (onItemClick) onItemClick();
+                }}
               >
                 <i className={`fas ${item.icon}`} />
                 <span>{item.title}</span>
               </a>
             ) : (
-              <Link to={item.to} className={currentPath === item.to ? 'active' : ''}>
+              <Link to={item.to} className={currentPath === item.to ? 'active' : ''} onClick={onItemClick}>
                 <i className={`fas ${item.icon}`} />
                 <span>{item.title}</span>
               </Link>

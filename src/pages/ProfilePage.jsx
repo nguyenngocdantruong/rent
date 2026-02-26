@@ -70,10 +70,10 @@ export default function ProfilePage() {
     : '?';
 
   return (
-    <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+    <div className="row g-4">
       {/* Cột trái: Profile */}
-      <div style={{ flex: '1 1 350px', maxWidth: 450 }}>
-        <div className="card-custom">
+      <div className="col-lg-4 col-12">
+        <div className="card-custom mb-4">
           <h2 className="card-title">
             <i className="fas fa-user-circle" style={{ marginRight: 10, color: '#3b9eff' }} />
             Thông tin cá nhân
@@ -107,7 +107,7 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        <div className="card-custom">
+        <div className="card-custom mb-0">
           <h5 style={{ fontWeight: 600, color: '#1a1d2e', marginBottom: 16 }}>
             <i className="fas fa-cog" style={{ marginRight: 8, color: '#6c757d' }} />
             Tài khoản
@@ -120,6 +120,7 @@ export default function ProfilePage() {
               padding: '10px 24px', borderRadius: 8,
               fontSize: 14, fontWeight: 600, cursor: 'pointer',
               display: 'inline-flex', alignItems: 'center', gap: 8,
+              width: '100%', justifyContent: 'center'
             }}
           >
             <i className="fas fa-sign-out-alt" />
@@ -129,8 +130,8 @@ export default function ProfilePage() {
       </div>
 
       {/* Cột phải: Danh sách số đã thuê */}
-      <div style={{ flex: '2 1 600px' }}>
-        <div className="table-container" style={{ margin: 0 }}>
+      <div className="col-lg-8 col-12">
+        <div className="table-container" style={{ margin: 0, overflow: 'hidden' }}>
           <div className="section-header">
             <h3 className="card-title mb-0">Số điện thoại đang chờ OTP</h3>
             <button className="btn btn-sm btn-light" onClick={() => setRequests(new Map(getActiveRequests()))}>
@@ -138,7 +139,8 @@ export default function ProfilePage() {
             </button>
           </div>
 
-          <table className="table table-custom">
+          <div className="table-responsive-custom">
+            <table className="table table-custom">
             <thead>
               <tr>
                 <th>DỊCH VỤ</th><th>THỜI GIAN THUÊ</th><th>GIÁ</th><th>SỐ ĐIỆN THOẠI</th><th>OTP</th><th>TRẠNG THÁI</th>
@@ -199,8 +201,9 @@ export default function ProfilePage() {
           )}
         </div>
       </div>
+    </div>
 
-      {/* Thông báo dạng Toast */}
+    {/* Thông báo dạng Toast */}
       {toast && (
         <div className={`alert alert-${toast.type} position-fixed`}
              style={{ bottom: 20, right: 20, zIndex: 9999, minWidth: 250, boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>

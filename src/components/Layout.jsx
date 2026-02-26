@@ -10,6 +10,7 @@ export default function Layout({ children }) {
   const [showQR, setShowQR] = useState(false);
   const [reloading, setReloading] = useState(false);
   const [toast, setToast] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
   const { user } = useAuth();
 
@@ -49,9 +50,25 @@ export default function Layout({ children }) {
 
   return (
     <>
-      <div className="sidebar">
-        <Sidebar currentPath={location.pathname} />
+      <div className="mobile-header">
+        <div className="d-flex align-items-center gap-2">
+          <img src="/logo-mini.png" width="30" height="30" alt="logo" style={{ borderRadius: 6 }}
+               onError={(e) => e.target.src = '/icon.png'} />
+          <span className="brand-name">VIOTP</span>
+        </div>
+        <button className="menu-toggle" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+          <i className={`fas ${isSidebarOpen ? 'fa-times' : 'fa-bars'}`}></i>
+        </button>
       </div>
+
+      <div className={`sidebar ${isSidebarOpen ? 'show' : ''}`}>
+        <Sidebar currentPath={location.pathname} onItemClick={() => setIsSidebarOpen(false)} />
+      </div>
+
+      {isSidebarOpen && (
+        <div className="sidebar-overlay" onClick={() => setIsSidebarOpen(false)}></div>
+      )}
+
       <div className="main-content">
         <div className="top-bar">
           <div />

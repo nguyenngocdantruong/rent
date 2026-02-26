@@ -104,7 +104,7 @@ export default function HistoryPage() {
 
       <div className="table-container">
         <h3 className="card-title">Lịch sử thuê số</h3>
-        <div className="table-responsive">
+        <div className="table-responsive-custom">
           <table className="table table-custom">
             <thead>
               <tr>

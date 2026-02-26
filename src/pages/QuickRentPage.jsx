@@ -161,7 +161,7 @@ export default function QuickRentPage() {
       <div className="card-custom">
         <h2 className="card-title">Thuê số nhanh</h2>
         <div className="row g-3 mb-4">
-          <div className="col-md-5">
+          <div className="col-lg-5 col-12">
             <label className="form-label">Quốc gia</label>
             <select className="form-select" value={country} onChange={e => setCountry(e.target.value)}>
               {CONFIG.COUNTRIES.map(c => (
@@ -169,7 +169,7 @@ export default function QuickRentPage() {
               ))}
             </select>
           </div>
-          <div className="col-md-5">
+          <div className="col-lg-5 col-12">
             <label className="form-label">Dịch vụ</label>
             <select className="form-select" value={serviceId} onChange={e => setServiceId(e.target.value)}>
               <option value="">--- Chọn dịch vụ ---</option>
@@ -178,7 +178,7 @@ export default function QuickRentPage() {
               ))}
             </select>
           </div>
-          <div className="col-md-2 d-flex align-items-end">
+          <div className="col-lg-2 col-12 d-flex align-items-end">
             <button className="btn btn-primary-custom w-100" onClick={handleRent} disabled={renting}>
               {renting ? <><span className="spinner-border spinner-border-sm me-2" />Đang thuê...</> : 'Thuê số ngay'}
             </button>
@@ -209,7 +209,8 @@ export default function QuickRentPage() {
           </button>
           <span className="text-muted">để thử lại số điện thoại</span>
         </div>
-        <table className="table table-custom">
+        <div className="table-responsive-custom">
+          <table className="table table-custom">
           <thead>
             <tr>
               <th>#</th><th>DỊCH VỤ</th><th>THỜI GIAN THUÊ</th><th>GIÁ</th><th>SỐ ĐIỆY THOẠI</th>
@@ -263,6 +264,7 @@ export default function QuickRentPage() {
             })}
           </tbody>
         </table>
+        </div>
       </div>
     </>
   );
